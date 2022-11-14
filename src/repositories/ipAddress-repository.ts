@@ -1,4 +1,4 @@
-import {IpAddressScheme} from "./db";
+import {IpAddressScheme} from "../schemes/ipAddress-scheme";
 
 export const ipAddressRepository = {
     async createNewConnection(ip: string, endpoint: string, connectionAt: number) {

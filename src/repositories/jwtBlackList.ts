@@ -1,4 +1,4 @@
-import {TokenBlackListScheme} from "./db";
+import {TokenBlackListScheme} from "../schemes/tokenBlackList-scheme";
 
 export const jwtBlackList = {
     async addTokenInBlackList(refreshToken: string) {

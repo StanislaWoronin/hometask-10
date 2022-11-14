@@ -1,4 +1,4 @@
-import {EmailConfirmationScheme} from "./db";
+import {EmailConfirmationScheme} from "../schemes/emailConfirm-scheme";
 import {EmailConfirmationType} from "../types/email-confirmation-type";
 
 export const emailConfirmationRepository = {

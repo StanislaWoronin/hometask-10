@@ -1,4 +1,4 @@
-import {PostsScheme} from "./db";
+import {PostsScheme} from "../schemes/posts-scheme";
 import {PostsType, PostType} from "../types/posts-type";
 import {giveSkipNumber} from "../helperFunctions";
 

@@ -1,4 +1,4 @@
-import {UserScheme} from "./db";
+import {UserScheme} from "../schemes/user-scheme";
 import {UserDBType, UsersType} from "../types/user-type";
 import {giveSkipNumber} from "../helperFunctions";
 
@@ -53,6 +53,7 @@ export const usersRepository = {
 
     async deleteUserById(userId: string): Promise<boolean> {
         const result = await UserScheme.deleteOne({id: userId})
+
         return result.deletedCount === 1
     },
 

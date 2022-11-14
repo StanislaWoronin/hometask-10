@@ -1,4 +1,4 @@
-import {BlogSchema} from "./db";
+import {BlogSchema} from "../schemes/blog-scheme";
 import {BlogsType, BlogType} from "../types/blogs-type";
 import {giveSkipNumber} from "../helperFunctions";
 

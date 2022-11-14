@@ -1,4 +1,4 @@
-import {SecurityScheme} from "./db";
+import {SecurityScheme} from "../schemes/security-scheme";
 import {DeviceSecurityType} from "../types/deviceSecurity-type";
 
 export const securityRepository = {
@@ -8,14 +8,6 @@ export const securityRepository = {
         } catch (e) {
             return null
         }
-    },
-
-    async giveLastSeveralSessions(ipAddress: string, sessionsСount: number) {
-        return SecurityScheme
-            .find({'userDevice.ipAddress': ipAddress})
-            .sort({['userDevice.iat']: 'desc'})
-            .limit(sessionsСount)
-            .lean()
     },
 
     async giveAllActiveSessions(userId: string) {

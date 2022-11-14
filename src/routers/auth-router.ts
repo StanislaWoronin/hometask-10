@@ -43,6 +43,7 @@ authRouter.post('/password-recovery',
             const newRecoveryCode = uuidv4()
             await emailConfirmationRepository.updateConfirmationCode(user.id, newRecoveryCode)
             await emailsManager.sendPasswordRecoveryEmail(req.body.email, newRecoveryCode)
+            console.log('createdRecoveryCode:', newRecoveryCode)
         }
 
         return res.sendStatus(204)
@@ -52,12 +53,12 @@ authRouter.post('/password-recovery',
 authRouter.post('/new-password',
     ...limiterAndPasswordValidation,
     async (req: Request, res: Response) => {
-        console.log('sendCode:', req.body.recoveryCode)
         const emailConfirmation = await emailConfirmationRepository
             .giveEmailConfirmationByCodeOrId(req.body.recoveryCode)
-        console.log('emailConfirmation:', emailConfirmation)
+
         if (!emailConfirmation) {
-            return res.status(400).send({errorsMessages: [{ message: 'Incorrect recovery code', field: "recoveryCode" }]})
+            return res.status(400)
+                .send({errorsMessages: [{ message: 'Incorrect recovery code', field: "recoveryCode" }]})
         }
 
         const user = await usersService.giveUserById(emailConfirmation.id)

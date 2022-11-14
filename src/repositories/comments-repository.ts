@@ -1,4 +1,4 @@
-import {CommentsSchema} from "./db";
+import {CommentsSchema} from "../schemes/comments-scheme";
 import {CommentBDType, CommentsType, CommentType} from "../types/comment-type";
 import {giveSkipNumber} from "../helperFunctions";
 
