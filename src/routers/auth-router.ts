@@ -38,15 +38,13 @@ authRouter.post('/password-recovery',
     ...limiterAndEmailValidation,
     async (req: Request, res: Response) => {
         const user = await usersRepository.giveUserByLoginOrEmail(req.body.email)
-        console.log(user)
-        const emailConfirmation = await emailConfirmationRepository.giveEmailConfirmationByCodeOrId(user!.id)
-        console.log(emailConfirmation)
+
         if (user) {
             const newRecoveryCode = uuidv4()
-            await emailConfirmationRepository.updateConfirmationCode(user.id, emailConfirmation!.confirmationCode)
-            await emailsManager.sendPasswordRecoveryEmail(req.body.email, emailConfirmation!.confirmationCode)
+            await emailConfirmationRepository.updateConfirmationCode(user.id, newRecoveryCode)
+            await emailsManager.sendPasswordRecoveryEmail(req.body.email, newRecoveryCode)
         }
-        // prosto dobavlu
+
         return res.sendStatus(204)
     }
 )
