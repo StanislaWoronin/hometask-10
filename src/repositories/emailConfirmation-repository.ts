@@ -11,16 +11,15 @@ export const emailConfirmationRepository = {
         }
     },
 
-    async giveEmailConfirmationByCodeOrIdOrEmail(codeOrIdOrEmail: string): Promise<EmailConfirmationType | null> {
+    async giveEmailConfirmationByCodeOrId(codeOrId: string): Promise<EmailConfirmationType | null> {
         return EmailConfirmationScheme
-            .findOne({$or:
-                    [{confirmationCode: codeOrIdOrEmail}, {id: codeOrIdOrEmail}, {email: codeOrIdOrEmail}]},
-                    {projection:{_id: false}})
+            .findOne({$or: [{confirmationCode: codeOrId}, {id: codeOrId}]},
+                     {projection:{_id: false}})
     },
 
-    async updateConfirmationCode(id: string, confirmationCode: string) {
+    async updateConfirmationCode(id: string, confirmationCode: string, newExpirationDate?: Date) {
         let result = await EmailConfirmationScheme
-            .updateOne({id}, {$set: {confirmationCode}})
+            .updateOne({id}, {$set: {confirmationCode, newExpirationDate}})
 
         return result.modifiedCount === 1
     },

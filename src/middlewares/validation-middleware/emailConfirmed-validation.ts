@@ -10,7 +10,7 @@ export const emailConfirmedValidation = body('email').isString().trim().isEmail(
             throw new Error('User with this email does not exist')
         }
 
-        const emailConfirmation = await emailConfirmationRepository.giveEmailConfirmationByCodeOrIdOrEmail(user.id)
+        const emailConfirmation = await emailConfirmationRepository.giveEmailConfirmationByCodeOrId(user.id)
 
         if (!emailConfirmation) {
             throw new Error('User with this email does not exist')

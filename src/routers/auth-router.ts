@@ -15,6 +15,7 @@ import {ipAddressLimiter} from "../middlewares/validation-middleware/ipAddressLi
 import {emailsManager} from "../managers/email-manager";
 import {emailConfirmationRepository} from "../repositories/emailConfirmation-repository";
 import {usersRepository} from "../repositories/users-repository";
+import add from "date-fns/add";
 
 
 export const authRouter = Router({})
@@ -36,14 +37,15 @@ authRouter.post('/login',
 )
 
 authRouter.post('/password-recovery',
-    limiterAndEmailValidation,
+    ...limiterAndEmailValidation,
     async (req: Request, res: Response) => {
-        const recoveryCode = uuidv4()
         const user = await usersRepository.giveUserByLoginOrEmail(req.body.email)
 
         if (user) {
-            await emailConfirmationRepository.updateConfirmationCode(user.id, recoveryCode)
-            await emailsManager.sendPasswordRecoveryEmail(req.body.email, recoveryCode)
+            const newRecoveryCode = uuidv4()
+            await emailConfirmationRepository.updateConfirmationCode(user.id, newRecoveryCode)
+            await emailsManager.sendPasswordRecoveryEmail(req.body.email, newRecoveryCode)
+            console.log('recoveryCode:', newRecoveryCode)
         }
 
         return res.sendStatus(204)
@@ -51,11 +53,12 @@ authRouter.post('/password-recovery',
 )
 
 authRouter.post('/new-password',
-    limiterAndPasswordValidation,
+    ...limiterAndPasswordValidation,
     async (req: Request, res: Response) => {
-        const emailConfirmation = await authService
+        console.log('sendCode:', req.body.recoveryCode)
+        const emailConfirmation = await emailConfirmationRepository
             .giveEmailConfirmationByCodeOrId(req.body.recoveryCode)
-
+        console.log('emailConfirmation:', emailConfirmation)
         if (!emailConfirmation) {
             return res.sendStatus(400)
         }
@@ -66,7 +69,7 @@ authRouter.post('/new-password',
             return res.sendStatus(404)
         }
 
-        await usersService.updateUserPassword(user.id, req.body.password)
+        await usersService.updateUserPassword(user.id, req.body.newPassword)
 
         return res.sendStatus(204)
     }

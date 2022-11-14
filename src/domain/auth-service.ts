@@ -33,14 +33,14 @@ export const authService = {
                 isConfirmed: false
             }
         }
-
+        console.log('confirmationCode:', userAccount.emailConfirmation.confirmationCode)
         const createdAccount = await this.createUserAccount(userAccount)
 
         if (!createdAccount) {
             return null
         }
 
-        const info = await emailsManager.sendConfirmationEmail(userAccount)
+        const info = await emailsManager.sendConfirmationEmail(email, userAccount.emailConfirmation.confirmationCode)
         return {userAccount: createdAccount, info}
     },
 
@@ -62,7 +62,8 @@ export const authService = {
         }
 
         const newConfirmationCode = uuidv4()
-        await emailConfirmationRepository.updateConfirmationCode(user.id, newConfirmationCode)
+        const newExpirationDate = add(new Date(), {hours: 24})
+        await emailConfirmationRepository.updateConfirmationCode(user.id, newConfirmationCode, newExpirationDate)
 
         const emailConfirmation = await this.giveEmailConfirmationByCodeOrId(user.id)
 
@@ -70,9 +71,7 @@ export const authService = {
             return null
         }
 
-        const userAccount = {accountData: user!, emailConfirmation: emailConfirmation!}
-
-        return await emailsManager.sendConfirmationEmail(userAccount)
+        return await emailsManager.sendConfirmationEmail(email, newConfirmationCode)
     },
 
     async createUserAccount(userAccount: UserAccountType) {
@@ -87,7 +86,7 @@ export const authService = {
     },
 
     async giveEmailConfirmationByCodeOrId(codeOrId: string) {
-        const emailConfirmation = await emailConfirmationRepository.giveEmailConfirmationByCodeOrIdOrEmail(codeOrId)
+        const emailConfirmation = await emailConfirmationRepository.giveEmailConfirmationByCodeOrId(codeOrId)
 
         if (!emailConfirmation) {
             return null

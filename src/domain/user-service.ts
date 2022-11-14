@@ -54,9 +54,9 @@ export const usersService = {
         return paginationContentPage(pageNumber, pageSize, users, totalCount)
     },
 
-    async updateUserPassword(userId: string, password: string): Promise<boolean> {
+    async updateUserPassword(userId: string, newPassword: string): Promise<boolean> {
         const passwordSalt = await bcrypt.genSalt(10)
-        const passwordHash = await _generateHash(password, passwordSalt) //TODO вынести в отдельную функцию
+        const passwordHash = await _generateHash(newPassword, passwordSalt) //TODO вынести в отдельную функцию
 
         return await usersRepository.updateUserPassword(userId, passwordSalt, passwordHash)
     },
