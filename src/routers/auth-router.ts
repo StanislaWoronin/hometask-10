@@ -58,7 +58,7 @@ authRouter.post('/new-password',
             .giveEmailConfirmationByCodeOrId(req.body.recoveryCode)
         console.log('emailConfirmation:', emailConfirmation)
         if (!emailConfirmation) {
-            return res.status(400).send({ message: 'Incorrect recoveryCode', field: "recoveryCode" })
+            return res.status(400).send({errorsMessages: [{ message: 'Incorrect recovery code', field: "recoveryCode" }]})
         }
 
         const user = await usersService.giveUserById(emailConfirmation.id)
