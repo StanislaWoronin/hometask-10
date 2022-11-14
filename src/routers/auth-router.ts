@@ -78,7 +78,7 @@ authRouter.post('/new-password',
 authRouter.post('/registration',
     postRegistrationMiddleware,
     async (req: Request, res: Response) => {
-        await authService.createUser(req.body.login, req.body.password, req.body.email, req.ip)
+        await authService.createUser(req.body.login, req.body.password, req.body.email)
 
         return res.sendStatus(204)
     }
