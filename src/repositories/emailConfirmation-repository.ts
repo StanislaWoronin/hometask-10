@@ -19,7 +19,7 @@ export const emailConfirmationRepository = {
 
     async updateConfirmationCode(id: string, confirmationCode: string, newExpirationDate?: Date) {
         let result = await EmailConfirmationScheme
-            .updateOne({id}, {$set: {confirmationCode, newExpirationDate}})
+            .updateOne({id}, {$set: {confirmationCode: confirmationCode}})
 
         return result.modifiedCount === 1
     },

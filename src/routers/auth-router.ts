@@ -53,21 +53,22 @@ authRouter.post('/password-recovery',
 authRouter.post('/new-password',
     ...limiterAndPasswordValidation,
     async (req: Request, res: Response) => {
+        console.log('req.body.recoveryCode: '+req.body.recoveryCode)
         const emailConfirmation = await emailConfirmationRepository
             .giveEmailConfirmationByCodeOrId(req.body.recoveryCode)
+        console.log('>>>', emailConfirmation)
+        if (!emailConfirmation) {
+            return res.status(400)
+                .send({errorsMessages: [{ message: 'Incorrect recovery code', field: "recoveryCode" }]})
+        }
 
-        // if (!emailConfirmation) {
-        //     return res.status(400)
-        //         .send({errorsMessages: [{ message: 'Incorrect recovery code', field: "recoveryCode" }]})
-        // }
+        const user = await usersService.giveUserById(emailConfirmation.id)
 
-        //const user = await usersService.giveUserById(emailConfirmation.id)
+        if (!user) {
+            return res.sendStatus(404)
+        }
 
-        // if (!user) {
-        //     return res.sendStatus(404)
-        // }
-
-        //await usersService.updateUserPassword(user.id, req.body.newPassword)
+        await usersService.updateUserPassword(user.id, req.body.newPassword)
 
         return res.sendStatus(204)
     }

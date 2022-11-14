@@ -101,5 +101,5 @@ export const authService = {
         }
 
         return emailConfirmation
-    }
+    } // TODO переделать вся инфа в токене
 }
