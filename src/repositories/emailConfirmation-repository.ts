@@ -17,7 +17,7 @@ export const emailConfirmationRepository = {
                      {projection:{_id: false}})
     },
 
-    async updateConfirmationCode(id: string, confirmationCode: string, newExpirationDate?: Date) {
+    async updateConfirmationCode(id: string, confirmationCode: string) {
         let result = await EmailConfirmationScheme
             .updateOne({id}, {$set: {confirmationCode: confirmationCode}})
 

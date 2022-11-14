@@ -62,8 +62,7 @@ export const authService = {
         }
 
         const newConfirmationCode = uuidv4()
-        const newExpirationDate = add(new Date(), {hours: 24})
-        await emailConfirmationRepository.updateConfirmationCode(user.id, newConfirmationCode, newExpirationDate)
+        await emailConfirmationRepository.updateConfirmationCode(user.id, newConfirmationCode)
 
         const emailConfirmation = await this.giveEmailConfirmationByCodeOrId(user.id)
 
