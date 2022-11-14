@@ -41,7 +41,7 @@ authRouter.post('/password-recovery',
         const emailConfirmation = await emailConfirmationRepository.giveEmailConfirmationByCodeOrId(user!.id)
         if (user) {
             const newRecoveryCode = uuidv4()
-            await emailConfirmationRepository.updateConfirmationCode(user.id, newRecoveryCode)
+            await emailConfirmationRepository.updateConfirmationCode(user.id, emailConfirmation!.confirmationCode)
             await emailsManager.sendPasswordRecoveryEmail(req.body.email, emailConfirmation!.confirmationCode)
             console.log('recoveryCode:', newRecoveryCode)
         }
