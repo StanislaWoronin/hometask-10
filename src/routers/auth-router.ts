@@ -46,7 +46,7 @@ authRouter.post('/password-recovery',
             await emailConfirmationRepository.updateConfirmationCode(user.id, emailConfirmation!.confirmationCode)
             await emailsManager.sendPasswordRecoveryEmail(req.body.email, emailConfirmation!.confirmationCode)
         }
-
+        // prosto dobavlu
         return res.sendStatus(204)
     }
 )
