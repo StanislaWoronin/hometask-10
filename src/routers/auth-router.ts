@@ -74,6 +74,7 @@ authRouter.post('/new-password',
     }
 )
 
+
 authRouter.post('/registration',
     postRegistrationMiddleware,
     async (req: Request, res: Response) => {
