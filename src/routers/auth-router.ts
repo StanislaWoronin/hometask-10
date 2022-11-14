@@ -15,8 +15,6 @@ import {ipAddressLimiter} from "../middlewares/validation-middleware/ipAddressLi
 import {emailsManager} from "../managers/email-manager";
 import {emailConfirmationRepository} from "../repositories/emailConfirmation-repository";
 import {usersRepository} from "../repositories/users-repository";
-import add from "date-fns/add";
-
 
 export const authRouter = Router({})
 
@@ -60,7 +58,7 @@ authRouter.post('/new-password',
             .giveEmailConfirmationByCodeOrId(req.body.recoveryCode)
         console.log('emailConfirmation:', emailConfirmation)
         if (!emailConfirmation) {
-            return res.sendStatus(400)
+            return res.status(400).send({ message: 'Incorrect recoveryCode', field: "recoveryCode" })
         }
 
         const user = await usersService.giveUserById(emailConfirmation.id)
