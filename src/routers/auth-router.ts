@@ -61,11 +61,11 @@ authRouter.post('/new-password',
         //         .send({errorsMessages: [{ message: 'Incorrect recovery code', field: "recoveryCode" }]})
         // }
 
-        const user = await usersService.giveUserById(emailConfirmation.id)
+        //const user = await usersService.giveUserById(emailConfirmation.id)
 
-        if (!user) {
-            return res.sendStatus(404)
-        }
+        // if (!user) {
+        //     return res.sendStatus(404)
+        // }
 
         await usersService.updateUserPassword(user.id, req.body.newPassword)
 
