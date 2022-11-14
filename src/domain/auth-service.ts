@@ -8,7 +8,7 @@ import {UserAccountType} from "../types/user-account-type";
 import {_generateHash} from "../helperFunctions";
 
 export const authService = {
-    async createUser(login: string, password: string, email: string, ipAddress: string) {
+    async createUser(login: string, password: string, email: string) {
         const passwordSalt = await bcrypt.genSalt(10)
         const passwordHash = await _generateHash(password, passwordSalt)
         const userAccountId = uuidv4()
@@ -41,7 +41,7 @@ export const authService = {
         }
 
         const info = await emailsManager.sendConfirmationEmail(email, userAccount.emailConfirmation.confirmationCode)
-        return {userAccount: createdAccount, info}
+        return userAccount
     },
 
     async confirmEmail(code: string): Promise<boolean> {

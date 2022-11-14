@@ -8,11 +8,11 @@ export const userDBtoUser = (userDB: UserDBType) => {
     }
 }
 
-export const usersOutputType = (userDB: UserDBType) => {
+export const usersOutputType = (accountData: UserDBType) => {
     return {
-        id: userDB.id,
-        login: userDB.login,
-        email: userDB.email,
-        createdAt: userDB.createdAt
+        id: accountData.id,
+        login: accountData.login,
+        email: accountData.email,
+        createdAt: accountData.createdAt
     }
 }

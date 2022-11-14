@@ -8,6 +8,7 @@ import {AboutMeType} from "../types/aboutMe-type";
 import {userDBtoUser, usersOutputType} from "../dataMapping/toUserOutputType";
 import {emailConfirmationRepository} from "../repositories/emailConfirmation-repository";
 import {UserAccountType} from "../types/user-account-type";
+import {authService} from "./auth-service";
 
 export const usersService = {
     async aboutMe(user: UserDBType): Promise<AboutMeType> {
@@ -15,26 +16,8 @@ export const usersService = {
     },
 
     async createNewUser(login: string, password: string, email: string): Promise<UserType | null> {
-
-        const passwordSalt = await bcrypt.genSalt(10)
-        const passwordHash = await _generateHash(password, passwordSalt)
-
-        const createNewUser: UserDBType = {
-            id: String(+new Date()),
-            login,
-            email,
-            passwordHash,
-            passwordSalt,
-            createdAt: new Date().toISOString()
-        }
-
-        const createdNewUser = await usersRepository.createNewUser(createNewUser)
-
-        if (!createdNewUser) {
-            return null
-        }
-
-        return usersOutputType(createdNewUser)
+        const userAccount = await authService.createUser(login, password, email)
+        return usersOutputType(userAccount!.accountData)
     },
 
     async giveUserById(id: string): Promise<UserDBType | null> {
